@@ -1,0 +1,80 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# 1 Data Reading : ( excel / csv / json )
+def read_data():
+    file_path = input("Please enter File Path :")
+    file_format = input("Please enter File Format (csv / excel / json) :").lower()
+    if file_format == 'csv':
+        return pd.read_csv(file_path)
+    elif file_format == 'excel':
+        return pd.read_excel(file_path)
+    elif file_format == 'json':
+        return pd.read_json(file_path)
+    else:
+        raise ValueError("File not available, please choose from 'csv', 'excel', or 'json'.")
+
+# 2 Data Summary
+def data_summary(data, target_column):
+    #print information
+    print("Information about all the columns and their situations and how many rows:\n")
+    print(data.info())
+    print("______________________________________________\n")
+    #value & frequencies
+    print("Values and their frequencies in the target column:\n")
+    print(data[target_column].value_counts())
+    print("______________________________________________\n")
+    #Summary coloumn
+    print("Summary statistics for the target column:\n")
+    print(data[target_column].describe())
+    print("______________________________________________\n")
+    #repeated value
+    print("The most repeated value in the target column:")
+    mode_value = data[target_column].mode()
+    if not mode_value.empty:
+        print(mode_value.values[0])
+    else:
+        print("No mode exists.")
+    print("______________________________________________\n")
+    #Mean
+    print("The mean of the target column:\n")
+    print("Using Pandas:")
+    print(data[target_column].mean())
+    print("Using NumPy:")
+    print(np.mean(data[target_column]))
+    print("______________________________________________\n")
+    #Max
+    print("The highest value of the target column:")
+    print(np.max(data[target_column]))
+    print("______________________________________________\n")
+    #Min
+    print("The smallest value of the target column:")
+    print(np.min(data[target_column]))
+    print("______________________________________________\n")
+
+# 3 Data handling missing value
+def clear_missing(data):
+    print("First, the rows with missing values:\n")
+    empty_rows = data[data.isnull().any(axis=1)]
+    print(empty_rows)
+    x = input("Do you want to delete or fill the empty cells? (D/F): ").upper()
+
+    if x == "D":
+        data = data.dropna()
+        return data
+    elif x == "F":
+        fill_value = input("Enter the value to fill the empty cells: ")
+        data = data.fillna(fill_value)
+        return data
+    else:
+        print("Invalid input. Please enter ('D' - delete) or ('F' - fill) missing values.")
+        return None
+
+# 4 Categorical Data Encoding
+def describe_categorical_data(data, category_column):
+    return data.groupby(category_column).describe()
+
+def encode_categorical_data(data):
+    return pd.get_dummies(data)
