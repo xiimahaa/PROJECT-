@@ -5,7 +5,7 @@ class DataPrepKit :
     self.data = self._read_data(data_path)
     
     # 1 Data Reading : ( excel / csv / json )
-    def _read_data(self, data_path):
+    def read_data(self, data_path):
     if data_path.endswith('.csv'):
         return pd.read_csv(data_path)
     elif data_path.endswith('.xlsx'):
